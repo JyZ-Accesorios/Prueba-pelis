@@ -1,0 +1,145 @@
+function registrarUsuario() {
+    let errores = [];
+    let nombreUsuario = document.querySelector("#nombreU").value;
+    let password = document.querySelector("#contrasenia").value;
+    let parrafo = document.querySelector("#p");
+
+
+
+    parrafo.innerHTML = "";
+
+
+    if (nombreUsuario == "" || password == "") {
+        errores.push("Complete todos los campos del registro");
+
+    }
+
+    if (nombreUsuario.length < 7) {
+        errores.push("El nombre de usuario debe tener mas de 6 caracteres");
+
+    }
+
+    if (password.length < 7) {
+        errores.push("La contraseña debe tener más de 6 caracteres.");
+    }
+
+    let tieneNumero = false;
+    let tieneArroba = false;
+
+    for (let i = 0; i < password.length; i++) {
+        let letra = (password.toString()).charAt(i);
+
+        if (letra >= 0 && letra <= 9) {
+            tieneNumero = true;
+        }
+
+        if ((password.toString()).includes("@")) {
+            tieneArroba = true;
+        }
+    }
+
+
+
+    let existe = false;
+
+    for (let i = 0; i < usuarios.length; i++) {
+        if (usuarios[i].nombre.toLowerCase() == nombreUsuario.toLowerCase()) {
+            existe = true;
+            return;
+        }
+    }
+
+    if (errores.length > 0) {
+        for (let i = 0; i < errores.length; i++) {
+            parrafo.innerHTML += errores[i] + "<br>";
+        }
+    }
+    else {
+        if (tieneNumero === false || tieneArroba === false) {
+            errores.push("La contraseña debe incluir al menos un número y el símbolo @.");
+            for (let i = 0; i < errores.length; i++) {
+                parrafo.innerHTML += errores[i] + "<br>";
+            }
+        }
+        else {
+            parrafo.innerHTML = "Usuario registrado";
+            
+            let nuevoUsuario = {
+                nombre: nombreUsuario,
+                password: password
+            };
+            usuarios.push(nuevoUsuario);
+        }
+    }
+}
+
+
+function mostrarUsuarios() {
+    let listaUsuarios = ""
+    for (let i = 0; i < usuarios.length; i++) {
+        listaUsuarios += "<p>" + usuarios[i].nombre;
+    }
+    return listaUsuarios;
+}
+
+let contraseniaLogin = document.querySelector("#contraseniaLogin");
+let passwordCompleta = "";
+
+contraseniaLogin.addEventListener("input", function () {
+    //guardar Pass Completa
+    passwordCompleta = contraseniaLogin.value;
+
+    //Mostrar asteriscos + solo la ultima letra visible
+
+    let mostrado = "*".repeat(passwordCompleta.length - 1) + passwordCompleta.slice(-1);
+    contraseniaLogin.value = mostrado;
+    contraseniaLogin.type = "text";
+
+    //volver a ocultar después de 500ms
+    clearTimeout(contraseniaLogin.timer);
+
+    contraseniaLogin.timer = setTimeout(function () {
+        contraseniaLogin.value = passwordCompleta;
+        contraseniaLogin.type = "password";
+    }, 500)
+})
+
+function login() {
+    let nombreUsuario = document.querySelector("#nombreULogin").value;
+    let parrafo = document.querySelector("#pLogin");
+
+    if (nombreUsuario == "" || passwordCompleta == "") {
+        parrafo.innerHTML = "Complete todos los campos";
+        return;
+    }
+
+
+    let usuarioEncontrado = buscarUsuario(nombreUsuario);
+
+    if (usuarioEncontrado == null) {
+        parrafo.innerHTML = "El usuario no existe";
+        return;
+    }
+
+    if (usuarioEncontrado.password != passwordCompleta) {
+        parrafo.innerHTML = "Contraseña incorrecta";
+        return;
+    }
+
+
+    parrafo.innerHTML = "Bievenido, " + nombreUsuario;
+    document.querySelector("#registrarse").style.display = "none";
+
+    ocultarTodo();
+    document.querySelector("#pagInicial").style.display = "block";
+}
+
+
+function buscarUsuario(nombreU) {
+    for (let i = 0; i < usuarios.length; i++) {
+        if (usuarios[i].nombre.toLowerCase() == nombreU.toLowerCase()) {
+            return usuarios[i];
+        }
+    }
+    return null;
+}
