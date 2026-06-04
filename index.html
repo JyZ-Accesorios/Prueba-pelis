@@ -4,19 +4,14 @@ function registrarUsuario() {
     let password = document.querySelector("#contrasenia").value;
     let parrafo = document.querySelector("#p");
 
-
-
     parrafo.innerHTML = "";
-
 
     if (nombreUsuario == "" || password == "") {
         errores.push("Complete todos los campos del registro");
-
     }
 
     if (nombreUsuario.length < 7) {
         errores.push("El nombre de usuario debe tener mas de 6 caracteres");
-
     }
 
     if (password.length < 7) {
@@ -38,8 +33,6 @@ function registrarUsuario() {
         }
     }
 
-
-
     let existe = false;
 
     for (let i = 0; i < usuarios.length; i++) {
@@ -53,15 +46,13 @@ function registrarUsuario() {
         for (let i = 0; i < errores.length; i++) {
             parrafo.innerHTML += errores[i] + "<br>";
         }
-    }
-    else {
+    } else {
         if (tieneNumero === false || tieneArroba === false) {
             errores.push("La contraseña debe incluir al menos un número y el símbolo @.");
             for (let i = 0; i < errores.length; i++) {
                 parrafo.innerHTML += errores[i] + "<br>";
             }
-        }
-        else {
+        } else {
             parrafo.innerHTML = "Usuario registrado";
             
             let nuevoUsuario = {
@@ -73,9 +64,8 @@ function registrarUsuario() {
     }
 }
 
-
 function mostrarUsuarios() {
-    let listaUsuarios = ""
+    let listaUsuarios = "";
     for (let i = 0; i < usuarios.length; i++) {
         listaUsuarios += "<p>" + usuarios[i].nombre;
     }
@@ -86,23 +76,19 @@ let contraseniaLogin = document.querySelector("#contraseniaLogin");
 let passwordCompleta = "";
 
 contraseniaLogin.addEventListener("input", function () {
-    //guardar Pass Completa
     passwordCompleta = contraseniaLogin.value;
-
-    //Mostrar asteriscos + solo la ultima letra visible
 
     let mostrado = "*".repeat(passwordCompleta.length - 1) + passwordCompleta.slice(-1);
     contraseniaLogin.value = mostrado;
     contraseniaLogin.type = "text";
 
-    //volver a ocultar después de 500ms
     clearTimeout(contraseniaLogin.timer);
 
     contraseniaLogin.timer = setTimeout(function () {
         contraseniaLogin.value = passwordCompleta;
         contraseniaLogin.type = "password";
-    }, 500)
-})
+    }, 500);
+});
 
 function login() {
     let nombreUsuario = document.querySelector("#nombreULogin").value;
@@ -112,7 +98,6 @@ function login() {
         parrafo.innerHTML = "Complete todos los campos";
         return;
     }
-
 
     let usuarioEncontrado = buscarUsuario(nombreUsuario);
 
@@ -126,14 +111,12 @@ function login() {
         return;
     }
 
-
     parrafo.innerHTML = "Bievenido, " + nombreUsuario;
     document.querySelector("#registrarse").style.display = "none";
 
     ocultarTodo();
     document.querySelector("#pagInicial").style.display = "block";
 }
-
 
 function buscarUsuario(nombreU) {
     for (let i = 0; i < usuarios.length; i++) {
